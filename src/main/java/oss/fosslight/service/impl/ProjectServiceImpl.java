@@ -2442,8 +2442,8 @@ public class ProjectServiceImpl extends CoTopComponent implements ProjectService
 		
 		if (project.getCsvFile() != null && project.getCsvFile().size() > 0) {
 			for (int i = 0; i < project.getCsvFile().size(); i++) {
-				projectMapper.deleteFileBySeq(project.getCsvFile().get(i));
 				fileService.deletePhysicalFile(project.getCsvFile().get(i), "Identification");
+				projectMapper.deleteFileBySeq(project.getCsvFile().get(i));
 			}
 		}
 		
