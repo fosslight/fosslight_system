@@ -382,8 +382,16 @@ public class ApiProjectV2Controller extends CoTopComponent {
             paramMap.put("loginUserName", userInfo.getUserId());
             paramMap.put("publicYn", publicYn);
             paramMap.put("comment", avoidNull(additionalInformation, ""));
+            paramMap.put("noticeType", avoidNull(noticeType, CoConstDef.CD_DTL_NOTICE_TYPE_GENERAL));
+            paramMap.put("noticeTypeEtc", noticeTypeEtc);
+
 
             result = apiProjectService.createProject(paramMap);
+
+            if (result == null || result.isEmpty()) {
+                return responseService.errorResponse(HttpStatus.BAD_REQUEST,
+                        String.format("Project '%s%s' already exists", prjName, avoidNull(" ("+prjVersion+")", "")));
+            }
 
             String resultPrjId = (String) result.get("prjId");
 
@@ -394,10 +402,7 @@ public class ApiProjectV2Controller extends CoTopComponent {
 
             int resultCnt = apiProjectService.makeOssNotice(noticeParamMap);
 
-            if (isEmpty(resultPrjId) || resultCnt <= 0) {
-                return responseService.errorResponse(HttpStatus.CONFLICT,
-                        CoCodeManager.getCodeString(CoConstDef.CD_OPEN_API_MESSAGE, CoConstDef.CD_OPEN_API_CREATE_PROJECT_DUPLICATE_MESSAGE));
-            }
+
             try {
                 History h = new History();
                 Project project = new Project();

@@ -576,6 +576,10 @@ public class CoCodeManager extends CoTopComponent {
         }
     }
 
+    public static String getCodeUseYN(String s, String s1) {
+        //TODO
+    }
+
     public static String getCodeExpString(String s, String s1) {
         CoCode code = getCodeInstance(s);
         
